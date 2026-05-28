@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 동아리·로컬 개발용 (운영 시 인증·제한 규칙으로 교체)
+    match /quizSets/{setId} {
+      allow read, write: if true;
+    }
+    match /answers/{answerId} {
+      allow read, write: if true;
+    }
+  }
+}
