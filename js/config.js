@@ -94,6 +94,8 @@ export function serializeQuizSetData(data) {
     questions,
     shared: Boolean(data.shared),
     revealAnswer: Boolean(data.revealAnswer),
+    // [요구사항 1] 완료 후 보여줄 메시지 — 빈 문자열이면 저장하되 표시 안 함
+    completionMessage: String(data.completionMessage ?? ''),
   };
 }
 

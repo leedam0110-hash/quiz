@@ -102,6 +102,10 @@ function syncEditingSetFromDom() {
   if (!s) return;
   const nameInput = document.getElementById('set-name-input');
   if (nameInput) s.name = nameInput.value;
+
+  // [요구사항 1] 완료 메시지 sync
+  const msgInput = document.getElementById('completion-message-input');
+  if (msgInput) s.completionMessage = msgInput.value;
 }
 
 function renderSetsList() {
@@ -152,6 +156,7 @@ function createNewSet() {
     questions: [],
     shared: false,
     revealAnswer: false,
+    completionMessage: '',
   };
   state.editingSetId = null;
   renderSetEditor(newSet, true);
@@ -188,6 +193,7 @@ function renderSetEditor(set, isNew) {
     .map((q, qi) => renderQCard(q, qi, questions.length))
     .join('');
 
+  // [요구사항 1] completionMessage 입력란 포함
   wrap.innerHTML = `
     <div class="set-editor">
       <div class="set-editor-header">
@@ -197,6 +203,20 @@ function renderSetEditor(set, isNew) {
         <div class="toggle-switch ${draft.revealAnswer ? 'on' : ''}" id="reveal-toggle"></div>
         정답 공개 (제출 후 정답 여부 표시)
       </label>
+
+      <div class="completion-msg-section">
+        <div class="q-label-sm completion-msg-label">
+          📝 완료 후 보여줄 메시지
+          <span class="completion-msg-hint">비워두면 표시되지 않습니다</span>
+        </div>
+        <textarea
+          id="completion-message-input"
+          class="completion-msg-textarea"
+          placeholder="예) 수고하셨습니다! 결과는 추후 공지될 예정입니다 😊"
+          oninput="syncCompletionMessage(this.value)"
+        >${escapeHtml(draft.completionMessage || '')}</textarea>
+      </div>
+
       <div class="divider"></div>
       <div class="question-cards" id="question-cards">${questionsHtml}</div>
       <button type="button" class="btn btn-ghost full-w mt-1" onclick="openTypeModal()">+ 문제 추가</button>
@@ -209,6 +229,12 @@ function renderSetEditor(set, isNew) {
 
   wrap._editingSet = draft;
   wrap._isNew = isNew;
+
+  // [요구사항 1] syncCompletionMessage를 전역에 등록
+  window.syncCompletionMessage = (val) => {
+    const s = getEditingSet();
+    if (s) s.completionMessage = val;
+  };
 }
 
 function renderShortFields(q) {
@@ -527,6 +553,7 @@ async function saveCurrentSet() {
     questions: s.questions,
     shared: Boolean(s.shared),
     revealAnswer: Boolean(s.revealAnswer),
+    completionMessage: s.completionMessage || '',  // [요구사항 1]
   };
 
   try {

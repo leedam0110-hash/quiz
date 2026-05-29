@@ -23,6 +23,59 @@
   </div>
 </div>
 
+<!-- Settings Button (bottom-right, start page only) -->
+<div class="settings-btn" id="settings-btn" title="화면 설정">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+  </svg>
+</div>
+
+<!-- Settings Modal -->
+<div class="settings-overlay" id="settings-modal">
+  <div class="settings-box">
+    <div class="settings-header">
+      <h3>⚙️ 화면 설정</h3>
+      <button class="settings-close-btn" onclick="closeSettingsModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">🖼️ 배경화면 이미지</div>
+      <div class="settings-preview-wrap" id="bg-preview-wrap">
+        <div class="settings-preview-placeholder" id="bg-preview-placeholder">미리보기</div>
+        <img id="bg-preview-img" class="settings-preview-img" style="display:none" alt="배경 미리보기"/>
+      </div>
+      <div class="settings-row">
+        <label class="btn btn-ghost settings-upload-btn">
+          업로드
+          <input type="file" accept="image/*" id="bg-upload-input" style="display:none" onchange="onBgUpload(event)"/>
+        </label>
+        <button class="btn btn-ghost" onclick="clearBgImage()">초기화</button>
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div class="settings-section">
+      <div class="settings-label">🏷️ 로고 이미지</div>
+      <div class="logo-preview-wrap" id="logo-preview-wrap">
+        <div class="settings-preview-placeholder" id="logo-preview-placeholder">미리보기</div>
+        <img id="logo-preview-img" class="logo-preview-img" style="display:none" alt="로고 미리보기"/>
+      </div>
+      <div class="settings-hint">업로드하면 상단 'QUIZ' 텍스트 대신 표시됩니다</div>
+      <div class="settings-row">
+        <label class="btn btn-ghost settings-upload-btn">
+          업로드
+          <input type="file" accept="image/*" id="logo-upload-input" style="display:none" onchange="onLogoUpload(event)"/>
+        </label>
+        <button class="btn btn-ghost" onclick="clearLogoImage()">초기화</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Password Modal -->
 <div class="modal-overlay" id="pw-modal">
   <div class="modal">
@@ -59,7 +112,11 @@
 <!-- ── START PAGE ── -->
 <div class="page active" id="page-start">
   <div class="start-inner">
-    <div class="start-title">QUIZ</div>
+    <!-- 로고: JS로 img 또는 텍스트 전환 -->
+    <div class="start-logo-wrap" id="start-logo-wrap">
+      <div class="start-title" id="start-title-text">QUIZ</div>
+      <img id="start-logo-img" class="start-logo-img" style="display:none" alt="로고"/>
+    </div>
     <div class="start-sub">준비되셨나요?</div>
     <button class="btn-start" onclick="startQuiz()">START</button>
   </div>

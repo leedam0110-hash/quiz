@@ -103,6 +103,10 @@ async function quizSubmit() {
 function showResult() {
   showPage('page-result');
   const revealAnswer = state.sharedSet.revealAnswer;
+
+  // [요구사항 1] 완료 메시지 — 정답 공개 여부 무관하게 항상 표시 (비어있으면 숨김)
+  const completionMessage = (state.sharedSet.completionMessage || '').trim();
+
   let scoreHtml = '';
   let correctCount = 0;
   let answersHtml = '';
@@ -135,11 +139,20 @@ function showResult() {
     scoreHtml = `<div class="result-score">${correctCount} / ${total}</div><div class="text-dim" style="margin-top:0.3rem">정답</div>`;
   }
 
+  // [요구사항 1] 완료 메시지 HTML 블록
+  const completionMsgHtml = completionMessage
+    ? `<div class="completion-message-box">
+        <div class="completion-message-icon">💬</div>
+        <div class="completion-message-text">${completionMessage.replace(/\n/g, '<br>')}</div>
+       </div>`
+    : '';
+
   document.getElementById('result-card').innerHTML = `
     <div class="result-emoji">${revealAnswer ? (correctCount === state.sharedSet.questions.length ? '🎉' : '📝') : '✅'}</div>
     <div class="result-title">${revealAnswer ? '결과 발표' : '제출 완료!'}</div>
     <div class="result-sub">${revealAnswer ? '수고하셨습니다!' : '답변이 저장되었습니다. 감사합니다!'}</div>
     ${scoreHtml}
+    ${completionMsgHtml}
     ${revealAnswer && answersHtml ? `<div class="result-answers">${answersHtml}</div>` : ''}
     <button class="btn btn-ghost full-w" style="margin-top:1.5rem" onclick="goHome()">처음으로</button>
   `;
